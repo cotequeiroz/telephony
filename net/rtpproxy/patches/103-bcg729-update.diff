@@ -1,0 +1,55 @@
+--- a/extractaudio/g729_compat.c
++++ b/extractaudio/g729_compat.c
+@@ -13,7 +13,7 @@ g279_compat_decode(G729_DCTX *ctx, uint8
+ 
+     assert(ibsize <= 10);
+ 
+-    bcg729Decoder(ctx, ibuf, 0, obuf);
++    bcg729Decoder(ctx, ibuf, ibsize, 0 /*no erasure*/, 0 /*not SID*/, 0 /*not RFC3389*/, obuf);
+ 
+     return (obuf);
+ }
+--- a/extractaudio/g729_compat.h
++++ b/extractaudio/g729_compat.h
+@@ -4,10 +4,10 @@
+ #  include <bcg729/decoder.h>
+ #  define G729_ECTX bcg729EncoderChannelContextStruct
+ #  define G729_DCTX bcg729DecoderChannelContextStruct
+-#  define G729_EINIT initBcg729EncoderChannel
++#  define G729_EINIT() initBcg729EncoderChannel(0) /* no VAD */
+ #  define G729_ECLOSE closeBcg729EncoderChannel
+ #  define G729_DINIT initBcg729DecoderChannel
+-#  define G729_ENCODE(ctx, ibuf, obuf) bcg729Encoder((ctx), (ibuf), (obuf))
++#  define G729_ENCODE(ctx, ibuf, obuf, olen) bcg729Encoder((ctx), (ibuf), (obuf), (olen))
+ #  define G729_DECODE(ctx, ibuf, isize) g279_compat_decode((ctx), (ibuf), (isize))
+ 
+    int16_t *g279_compat_decode(G729_DCTX *, uint8_t *, size_t);
+@@ -20,7 +20,7 @@
+ #  define G729_EINIT g729_encoder_new
+ #  define G729_ECLOSE g729_encoder_destroy
+ #  define G729_DINIT g729_decoder_new
+-#  define G729_ENCODE(ctx, ibuf, obuf) g729_encode_frame((ctx), (ibuf), (obuf))
++#  define G729_ENCODE(ctx, ibuf, obuf, osize) (*(osize))=10 /*no VAD*/; g729_encode_frame((ctx), (ibuf), (obuf))
+ #  define G729_DECODE(ctx, ibuf, isize) g729_decode_frame((ctx), (ibuf), (isize))
+ # endif
+ 
+--- a/makeann/makeann.c
++++ b/makeann/makeann.c
+@@ -200,10 +200,13 @@ int main(int argc, char **argv)
+ 
+ #ifdef ENABLE_G729
+             case RTP_G729:
+-                for (j = 0; j < 2; j++) {
+-                    G729_ENCODE(ctx_g729, &(slbuf[j * 80]), &(lawbuf[j * 10]));
+-                }
+-                wsize = 20;
++	        {
++		    uint8_t g729_bl=10;
++                    for (j = 0; j < 2; j++) {
++                        G729_ENCODE(ctx_g729, &(slbuf[j * 80]), &(lawbuf[j * 10]), &g729_bl);
++			wsize += g729_bl;
++                    }
++		}
+                 break;
+ #endif
+ 
