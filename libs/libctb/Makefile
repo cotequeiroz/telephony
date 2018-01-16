@@ -15,8 +15,6 @@ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://iftools.com/download/ctb/$(PKG_VERSION)
 PKG_HASH:=1cb0026a66cfbf8e26988f76cb861f1fbfd04f272f9b9adaf0d463d01282fc08
 
-MAKE_PATH:=build
-
 PKG_INSTALL:=1
 
 PKG_LICENSE:=LGPL
@@ -24,6 +22,8 @@ PKG_LICENSE_FILES:=build/COPYING
 PKG_MAINTAINER:=Sebastian Kemper <sebastian_ml@gmx.net>
 
 include $(INCLUDE_DIR)/package.mk
+
+MAKE_PATH:=build
 
 define Package/$(PKG_NAME)
   SUBMENU:=Telephony
