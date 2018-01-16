@@ -94,6 +94,7 @@ baresip-mod-v4l2      := USE_V4L2
 BARESIP_MOD_OPTIONS:= \
 	MOD_AUTODETECT= \
 	EXTRA_MODULES="dtmfio" \
+	USE_X264= \
 	$(foreach m,$(baresip-mods),$(baresip-mod-$(m))=$(if $(CONFIG_PACKAGE_baresip-mod-$(m)),1))
 
 MAKE_FLAGS+= \
