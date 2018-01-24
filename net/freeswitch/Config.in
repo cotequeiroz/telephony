@@ -262,7 +262,7 @@ menu "Configuration"
     depends on FS_WITH_PYTHON
     string
     prompt "full path to binary python$(PYTHON3_VERSION)"
-    default "$$(STAGING_DIR_HOSTPKG)/bin/python$$(PYTHON3_VERSION)"
+    default "$$(STAGING_DIR_HOSTPKG)/bin/python$(PYTHON3_VERSION)"
     help
         Specify the full path to binary python$(PYTHON3-VERSION).
 
