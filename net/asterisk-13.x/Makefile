@@ -11,7 +11,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk13
 PKG_VERSION:=13.19.2
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://downloads.asterisk.org/pub/telephony/asterisk/releases
@@ -39,8 +39,281 @@ MENUSELECT_CATEGORIES:= \
 	MENUSELECT_UTILS \
 	MENUSELECT_AGIS
 
+MODULES_AVAILABLE:= \
+	app-adsiprog \
+	app-agent-pool \
+	app-alarmreceiver \
+	app-amd \
+	app-authenticate \
+	app-bridgewait \
+	app-celgenuserevent \
+	app-chanisavail \
+	app-channelredirect \
+	app-chanspy \
+	app-confbridge \
+	app-controlplayback \
+	app-dahdiras \
+	app-dictate \
+	app-directed_pickup \
+	app-directory \
+	app-disa \
+	app-dumpchan \
+	app-exec \
+	app-externalivr \
+	app-festival \
+	app-flash \
+	app-followme \
+	app-getcpeid \
+	app-ices \
+	app-image \
+	app-ivrdemo \
+	app-milliwatt \
+	app-minivm \
+	app-mixmonitor \
+	app-morsecode \
+	app-mp3 \
+	app-originate \
+	app-page \
+	app-playtones \
+	app-privacy \
+	app-queue \
+	app-read \
+	app-readexten \
+	app-record \
+	app-saycounted \
+	app-sayunixtime \
+	app-senddtmf \
+	app-sendtext \
+	app-skel \
+	app-sms \
+	app-softhangup \
+	app-speech \
+	app-stack \
+	app-stasis \
+	app-system \
+	app-talkdetect \
+	app-test \
+	app-transfer \
+	app-url \
+	app-userevent \
+	app-verbose \
+	app-waitforring \
+	app-waitforsilence \
+	app-waituntil \
+	app-while \
+	app-zapateller \
+	bridge-builtin-features \
+	bridge-builtin-interval-features \
+	bridge-holding \
+	bridge-native-rtp \
+	bridge-simple \
+	bridge-softmix \
+	cdr \
+	cdr-csv \
+	cdr-sqlite3 \
+	cel-custom \
+	cel-manager \
+	cel-sqlite3-custom \
+	chan-alsa \
+	chan-bridge-media \
+	chan-console \
+	chan-dahdi \
+	chan-iax2 \
+	chan-mgcp \
+	chan-mobile \
+	chan-motif \
+	chan-ooh323 \
+	chan-oss \
+	chan-phone \
+	chan-rtp \
+	chan-sip \
+	chan-skinny \
+	chan-unistim \
+	codec-a-mu \
+	codec-adpcm \
+	codec-alaw \
+	codec-dahdi \
+	codec-g722 \
+	codec-g726 \
+	codec-gsm \
+	codec-ilbc \
+	codec-lpc10 \
+	codec-resample \
+	codec-speex \
+	codec-ulaw \
+	curl \
+	format-g719 \
+	format-g723 \
+	format-g726 \
+	format-g729 \
+	format-gsm \
+	format-h263 \
+	format-h264 \
+	format-ilbc \
+	format-jpeg \
+	format-mp3 \
+	format-ogg-vorbis \
+	format-pcm \
+	format-siren14 \
+	format-siren7 \
+	format-sln \
+	format-vox \
+	format-wav \
+	format-wav-gsm \
+	func-aes \
+	func-base64 \
+	func-blacklist \
+	func-callcompletion \
+	func-channel \
+	func-config \
+	func-cut \
+	func-db \
+	func-devstate \
+	func-dialgroup \
+	func-dialplan \
+	func-enum \
+	func-env \
+	func-extstate \
+	func-frame-trace \
+	func-global \
+	func-groupcount \
+	func-hangupcause \
+	func-holdintercept \
+	func-iconv \
+	func-jitterbuffer \
+	func-lock \
+	func-math \
+	func-md5 \
+	func-module \
+	func-periodic-hook \
+	func-pitchshift \
+	func-presencestate \
+	func-rand \
+	func-realtime \
+	func-sha1 \
+	func-shell \
+	func-sorcery \
+	func-speex \
+	func-sprintf \
+	func-srv \
+	func-sysinfo \
+	func-talkdetect \
+	func-uri \
+	func-version \
+	func-vmcount \
+	func-volume \
+	odbc \
+	pbx-ael \
+	pbx-dundi \
+	pbx-loopback \
+	pbx-lua \
+	pbx-realtime \
+	pbx-spool \
+	pgsql \
+	pjsip \
+	res-adsi \
+	res-ael-share \
+	res-agi \
+	res-ari \
+	res-ari-applications \
+	res-ari-asterisk \
+	res-ari-bridges \
+	res-ari-channels \
+	res-ari-device-states \
+	res-ari-endpoints \
+	res-ari-events \
+	res-ari-mailboxes \
+	res-ari-model \
+	res-ari-playbacks \
+	res-ari-recordings \
+	res-ari-sounds \
+	res-calendar \
+	res-calendar-caldav \
+	res-calendar-ews \
+	res-calendar-exchange \
+	res-calendar-icalendar \
+	res-chan-stats \
+	res-clialiases \
+	res-clioriginate \
+	res-config-ldap \
+	res-config-mysql \
+	res-config-sqlite3 \
+	res-convert \
+	res-endpoint-stats \
+	res-hep \
+	res-hep-pjsip \
+	res-hep-rtcp \
+	res-fax-spandsp \
+	res-fax \
+	res-format-attr-celt \
+	res-format-attr-g729 \
+	res-format-attr-h263 \
+	res-format-attr-h264 \
+	res-format-attr-opus \
+	res-format-attr-silk \
+	res-format-attr-siren14 \
+	res-format-attr-siren7 \
+	res-format-attr-vp8 \
+	res-http-websocket \
+	res-limit \
+	res-manager-devicestate \
+	res-manager-presencestate \
+	res-monitor \
+	res-musiconhold \
+	res-mutestream \
+	res-mwi-external \
+	res-mwi-external-ami \
+	res-parking \
+	res-phoneprov \
+	res-pjsip-phoneprov \
+	res-pjproject \
+	res-pktccops \
+	res-realtime \
+	res-rtp-asterisk \
+	res-rtp-multicast \
+	res-security-log \
+	res-smdi \
+	res-snmp \
+	res-sorcery \
+	res-sorcery-memory-cache \
+	res-speech \
+	res-srtp \
+	res-stasis \
+	res-stasis-answer \
+	res-stasis-device-state \
+	res-stasis-mailbox \
+	res-stasis-playback \
+	res-stasis-recording \
+	res-stasis-snoop \
+	res-statsd \
+	res-stun-monitor \
+	res-timing-dahdi \
+	res-timing-pthread \
+	res-timing-timerfd \
+	res-xmpp \
+	voicemail
+
+UTILS_AVAILABLE:= \
+	aelparse \
+	astcanary \
+	astdb2sqlite3 \
+	astdb2bdb \
+	check_expr \
+	check_expr2 \
+	conf2ael \
+	muted \
+	smsq \
+	stereorize \
+	streamplayer
+
 AST_ENABLE:=
 
+PKG_CONFIG_DEPENDS:= \
+	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-%,$(MODULES_AVAILABLE)) \
+	$(patsubst %,CONFIG_PACKAGE_$(PKG_NAME)-util-%,$(UTILS_AVAILABLE)) \
+	CONFIG_ASTERISK13_LOW_MEMORY
+
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/host-build.mk
 
@@ -150,7 +423,7 @@ define Package/asterisk13
 $(call Package/asterisk13/Default)
   TITLE:=Complete open source PBX, v$(PKG_VERSION)
   MENU:=1
-  DEPENDS:=+jansson +libcap +libedit +libncurses +libopenssl +libpopt +libsqlite3 +libstdcpp +libuuid +libxml2 +libxslt +zlib
+  DEPENDS:=$(CXX_DEPENDS) +jansson +libcap +libedit +libncurses +libopenssl +libsqlite3 +libuuid +libxml2 +zlib
 endef
 
 define Package/asterisk13/description
@@ -264,7 +537,7 @@ CONFIGURE_ARGS+= \
 	--without-osptk \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-pbx-lua),--with-lua="$(STAGING_DIR)/usr",--without-lua) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-pgsql),--with-postgres="$(STAGING_DIR)/usr",--without-postgres) \
-	--with-popt="$(STAGING_DIR)/usr" \
+	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-util-smsq),--with-popt="$(STAGING_DIR)/usr",--without-popt) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-chan-console),--with-portaudio="$(STAGING_DIR)/usr",--without-portaudio) \
 	--without-pwlib \
 	--without-radius \
@@ -372,6 +645,13 @@ AST_MENUSELECT_OPTS = \
 	--without-curses \
 	--with-libxml2="$(STAGING_DIR_HOSTPKG)/usr"
 
+define Build/menuselect
+	CC="$(HOSTCC)" \
+	CFLAGS="$(HOST_CFLAGS) -I$(STAGING_DIR_HOSTPKG)/include/libxml2" \
+	LDFLAGS="$(HOST_LDFLAGS) -Wl,-rpath,$(STAGING_DIR_HOSTPKG)/lib" \
+	$(MAKE) -C "$(PKG_BUILD_DIR)/menuselect"
+endef
+
 define Build/Configure
 	cd $(PKG_BUILD_DIR); \
 		./bootstrap.sh
@@ -389,11 +669,9 @@ define Build/Configure
 endef
 
 define Build/Compile
-	CC="$(HOSTCC)" \
-	CFLAGS="$(HOST_CFLAGS) -I$(STAGING_DIR_HOSTPKG)/include/libxml2" \
-	LDFLAGS="$(HOST_LDFLAGS) -Wl,-rpath,$(STAGING_DIR_HOSTPKG)/lib" \
-	$(MAKE) -C "$(PKG_BUILD_DIR)/menuselect"
-	$(MAKE) -C "$(PKG_BUILD_DIR)" menuselect-tree
+	$(call Build/menuselect)
+	$(call Build/Compile/Default,menuselect-tree)
+
 	cd "$(PKG_BUILD_DIR)" && MENUSELECT_ARGS= && \
 		for cat in $(MENUSELECT_CATEGORIES); do \
 			MENUSELECT_ARGS="$$$$MENUSELECT_ARGS --disable-category $$$$cat"; \
@@ -413,13 +691,15 @@ define Build/Compile
 			--disable BUILD_NATIVE \
 			$(if $(CONFIG_ASTERISK13_LOW_MEMORY),--enable LOW_MEMORY) \
 			menuselect.makeopts
-	# Hack:
+
 	# When changing anything in MENUSELECT_CFLAGS the file ".lastclean"
 	# gets deleted. E.g. when compiling on x86 for x86 "--disable
 	# BUILD_NATIVE" changes MENUSELECT_CFLAGS and the file gets removed.
 	# But that will result in a rebuild attempt of menuselect which will
-	# likely fail. Prevent that by recreating ".lastclean".
-	$(CP) "$(PKG_BUILD_DIR)/.cleancount" "$(PKG_BUILD_DIR)/.lastclean"
+	# likely fail. Prevent that by recreating ".lastclean" and menuselect.
+	$(call Build/Compile/Default,.lastclean)
+	$(call Build/menuselect)
+
 	$(call Build/Compile/Default,all install samples)
 endef
 
@@ -491,7 +771,7 @@ $(eval $(call BuildAsterisk13Module,app-sayunixtime,Say Unix time,an application
 $(eval $(call BuildAsterisk13Module,app-senddtmf,Send DTMF digits,Sends arbitrary DTMF digits,,,app_senddtmf,,))
 $(eval $(call BuildAsterisk13Module,app-sendtext,Send text,transmit a text message,,,app_sendtext,,))
 $(eval $(call BuildAsterisk13Module,app-skel,Skeleton [sample],skeleton for development of an Asterisk application,,app_skel.conf,app_skel,,))
-$(eval $(call BuildAsterisk13Module,app-sms,SMS,SMS support (ETSI ES 201 912 protocol 1),+libpopt +libstdcpp,,app_sms,,))
+$(eval $(call BuildAsterisk13Module,app-sms,SMS,SMS support (ETSI ES 201 912 protocol 1),,,app_sms,,))
 $(eval $(call BuildAsterisk13Module,app-softhangup,Hang up requested channel,SoftHangup application,,,app_softhangup,,))
 $(eval $(call BuildAsterisk13Module,app-speech,Dialplan Speech,Dialplan Speech Applications,+asterisk13-res-speech,,app_speech_utils,,))
 $(eval $(call BuildAsterisk13Module,app-stack,Stack applications,Stack applications Gosub Return etc.,+asterisk13-res-agi,,app_stack,,))
@@ -709,14 +989,14 @@ $(eval $(call BuildAsterisk13Module,voicemail,Voicemail,voicemail related module
 ################################
 # $(eval $(call BuildAsterisk13Util,Utility,Description,Dependencies,Configuration Files))
 
-$(eval $(call BuildAsterisk13Util,aelparse,Check extensions.ael file.,,))
+$(eval $(call BuildAsterisk13Util,aelparse,Check extensions.ael file.,+$(PKG_NAME)-pbx-ael,))
 $(eval $(call BuildAsterisk13Util,astcanary,Assures Asterisk no threads have gone missing.,,))
 $(eval $(call BuildAsterisk13Util,astdb2sqlite3,Convert astdb to SQLite 3.,,))
 $(eval $(call BuildAsterisk13Util,astdb2bdb,Convert astdb back to Berkeley DB 1.86.,,))
 $(eval $(call BuildAsterisk13Util,check_expr,Expression checker [older version].,,))
 $(eval $(call BuildAsterisk13Util,check_expr2,Expression checker [newer version].,,))
-$(eval $(call BuildAsterisk13Util,conf2ael,Convert .conf to .ael.,,))
+$(eval $(call BuildAsterisk13Util,conf2ael,Convert .conf to .ael.,+$(PKG_NAME)-pbx-ael,))
 $(eval $(call BuildAsterisk13Util,muted,Listens for AMI events. Mutes soundcard during call.,,muted.conf))
-$(eval $(call BuildAsterisk13Util,smsq,Send messages from command line.,,))
+$(eval $(call BuildAsterisk13Util,smsq,Send messages from command line.,+libpopt,))
 $(eval $(call BuildAsterisk13Util,stereorize,Merge two mono WAV-files to one stereo WAV-file.,,))
 $(eval $(call BuildAsterisk13Util,streamplayer,A utility for reading from a raw TCP stream [MOH source].,,))
