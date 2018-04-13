@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=yate
 PKG_VERSION:=6.0.0-1
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://yate.null.ro/tarballs/yate6/
@@ -263,7 +263,7 @@ $(eval $(call BuildPlugin,osschan,client,OSS Sound Channel,))
 $(eval $(call BuildPlugin,park,server,Call Parking,))
 $(eval $(call BuildPlugin,pbx,,PBX Message Handlers,))
 $(eval $(call BuildPlugin,pbxassist,server,Full featured PBX and IVR,,,y))
-$(eval $(call BuildPlugin,pgsqldb,server,PostgrestSQL Backend DB,@!arc +libpq))
+$(eval $(call BuildPlugin,pgsqldb,server,PostgrestSQL Backend DB,+libpq))
 $(eval $(call BuildPlugin,presence,server,Presence,,,y))
 $(eval $(call BuildPlugin,queues,server,Call Distribution and Queues from Database,,,y))
 $(eval $(call BuildPlugin,queuesnotify,server,Notify when queued call status changes,,,y))
