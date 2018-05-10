@@ -108,7 +108,7 @@ CONFIGURE_ARGS+= \
 	--enable-ilbc \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-ilbcwebrtc),--enable-ilbc-webrtc,--disable-ilbc-webrtc) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-pgsqldb),--with-libpq="$(STAGING_DIR)/usr",--without-libpq) \
-	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-mysqldb),--with-mysql="$(STAGING_DIR)/usr",--without-mysql) \
+	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-mysqldb),--with-mysql,--without-mysql) \
 	--without-wphwec \
 	--without-libgsm \
 	--without-amrnb \
