@@ -619,6 +619,10 @@ ifeq ($(CONFIG_ARCH),"mips")
 endif
 #endif
 
+ifeq ($(CONFIG_USE_GLIBC),y)
+	CONFIGURE_VARS+= \
+		LIBS="-L$(STAGING_DIR)/lib -Wl,--push-state,--as-needed -lbsd -Wl,--pop-state"
+endif
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
