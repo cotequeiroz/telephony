@@ -639,6 +639,11 @@ CONFIGURE_VARS += \
 	ac_cv_path_CONFIG_NEON29=$(STAGING_DIR)/usr/bin/neon-config
 endif
 
+ifeq ($(CONFIG_USE_GLIBC),y)
+CONFIGURE_VARS += \
+	LIBS='-Wl,--push-state,--as-needed -ldl -Wl,--pop-state'
+endif
+
 MAKE_FLAGS+= \
 	ASTDATADIR="/usr/share/asterisk" \
 	DESTDIR="$(PKG_INSTALL_DIR)"
