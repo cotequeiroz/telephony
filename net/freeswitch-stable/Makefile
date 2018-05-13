@@ -686,6 +686,12 @@ CONFIGURE_VARS+= \
 	PERL_LIBDIR="-L$(PERL_SITELIB)/CORE" \
 	PERL_LIBS="$(FS_STABLE_PERL_LIBS) $(EXTRA_LIBDIRS:%=-L%) $(EXTRA_LIBS:%=-l%)" \
 	PERL_SITEDIR="$(PERL_SITELIB)"
+
+ifeq ($(CONFIG_USE_GLIBC),y)
+	PERL_LIBS+= -L$(STAGING_DIR)/lib -lbsd
+	CONFIGURE_VARS+= \
+		ac_cv_lib_perl_perl_alloc=yes
+endif
 else
 CONFIGURE_VARS+= \
 	ac_cv_have_perl=no \
