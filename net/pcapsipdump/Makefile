@@ -6,7 +6,6 @@
 #
 
 include $(TOPDIR)/rules.mk
-include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=pcapsipdump
 PKG_VERSION:=0.2
@@ -19,6 +18,7 @@ PKG_HASH:=4d4dc2664963c08de40da47ca0dcd1eeae09edc42241bd6daa7ff8c59089dce9
 PKG_LICENSE:=GPL-2.0+
 PKG_LICENSE_FILES:=LICENSE
 
+include $(INCLUDE_DIR)/uclibc++.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pcapsipdump
