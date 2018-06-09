@@ -1,0 +1,78 @@
+--- a/modules/openssl.cpp
++++ b/modules/openssl.cpp
+@@ -27,14 +27,13 @@
+ #include <openssl/ssl.h>
+ #include <openssl/rand.h>
+ #include <openssl/err.h>
++#include <openssl/modes.h>
+ 
+ #ifndef OPENSSL_NO_AES
+ #include <openssl/aes.h>
+ #endif
+-#ifdef NO_AESCTR
+-#include <openssl/modes.h>
+-#define AES_ctr128_encrypt(in,out,len,key,ivec,ecount,num) \
+-     CRYPTO_ctr128_encrypt(in,out,len,key,ivec,ecount,num,(block128_f)AES_encrypt)
++#if OPENSSL_VERSION_NUMBER < 0x10100000
++#define TLS_method SSLv23_method
+ #endif
+ #ifndef OPENSSL_NO_DES
+ #include <openssl/des.h>
+@@ -290,7 +289,7 @@ SslContext::SslContext(const char* name)
+     : String(name),
+     m_context(0)
+ {
+-    m_context = ::SSL_CTX_new(::SSLv23_method());
++    m_context = ::SSL_CTX_new(::TLS_method());
+     SSL_CTX_set_info_callback(m_context,infoCallback);
+ #ifdef DEBUG
+     SSL_CTX_set_msg_callback(m_context,msgCallback);
+@@ -623,7 +622,7 @@ bool AesCtrCipher::setKey(const void* ke
+ {
+     if (!(key && len && m_key))
+ 	return false;
+-    // AES_ctr128_encrypt is its own inverse
++    // CRYPTO_ctr128_encrypt is its own inverse
+     return 0 == AES_set_encrypt_key((const unsigned char*)key,len*8,m_key);
+ }
+ 
+@@ -648,20 +647,21 @@ bool AesCtrCipher::encrypt(void* outData
+ 	inpData = outData;
+     unsigned int num = 0;
+     unsigned char eCountBuf[AES_BLOCK_SIZE];
+-    AES_ctr128_encrypt(
++    CRYPTO_ctr128_encrypt(
+ 	(const unsigned char*)inpData,
+ 	(unsigned char*)outData,
+ 	len,
+ 	m_key,
+ 	m_initVector,
+ 	eCountBuf,
+-	&num);
++	&num,
++	(block128_f)AES_encrypt);
+     return true;
+ }
+ 
+ bool AesCtrCipher::decrypt(void* outData, unsigned int len, const void* inpData)
+ {
+-    // AES_ctr128_encrypt is its own inverse
++    // CRYPTO_ctr128_encrypt is its own inverse
+     return encrypt(outData,len,inpData);
+ }
+ 
+@@ -905,11 +905,13 @@ void OpenSSL::initialize()
+     Configuration cfg(Engine::configFile("openssl"));
+     if (!m_handler) {
+ 	setup();
++#if OPENSSL_VERSION_NUMBER < 0x10100000
+ 	::SSL_load_error_strings();
+ 	::SSL_library_init();
++#endif
+ 	addRand(Time::now());
+ 	s_index = ::SSL_get_ex_new_index(0,const_cast<char*>("TelEngine::SslSocket"),0,0,0);
+-	s_context = ::SSL_CTX_new(::SSLv23_method());
++	s_context = ::SSL_CTX_new(::TLS_method());
+ 	SSL_CTX_set_info_callback(s_context,infoCallback); // macro - no ::
+ 	m_handler = new SslHandler;
+ 	Engine::install(m_handler);
