@@ -1,0 +1,27 @@
+--- a/src/include/switch_regex.h
++++ b/src/include/switch_regex.h
+@@ -40,7 +40,11 @@ SWITCH_BEGIN_EXTERN_C
+  * @ingroup FREESWITCH
+  * @{
+  */
++#ifdef HAVE_REAL_PCRE8_OR_16
++	typedef struct real_pcre8_or_16 switch_regex_t;
++#else
+ 	typedef struct real_pcre switch_regex_t;
++#endif
+ 
+ SWITCH_DECLARE(switch_regex_t *) switch_regex_compile(const char *pattern, int options, const char **errorptr, int *erroroffset,
+ 													  const unsigned char *tables);
+--- a/configure.ac
++++ b/configure.ac
+@@ -1294,7 +1294,9 @@ fi
+ 
+ PKG_CHECK_MODULES([SQLITE], [sqlite3 >= 3.6.20])
+ PKG_CHECK_MODULES([CURL], [libcurl >= 7.19])
+-PKG_CHECK_MODULES([PCRE], [libpcre >= 7.8])
++PKG_CHECK_MODULES([PCRE], [libpcre >= 7.8],[
++  PKG_CHECK_MODULES([PCRE], [libpcre >= 8.42],[
++    APR_ADDTO([SWITCH_AM_CFLAGS], [-DHAVE_REAL_PCRE8_OR_16])],[])])
+ PKG_CHECK_MODULES([SPEEX], [speex >= 1.2rc1 speexdsp >= 1.2rc1])
+ PKG_CHECK_MODULES([YAML], [yaml-0.1 >= 0.1.4],[
+   AM_CONDITIONAL([HAVE_YAML],[true])],[

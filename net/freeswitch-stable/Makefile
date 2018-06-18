@@ -638,8 +638,10 @@ endef
 $$(eval $$(call BuildPackage,$(PKG_NAME)-util-$(subst _,-,$(1))))
 endef
 
+#EXTRA_CFLAGS+= -Wno-error=incompatible-pointers
 CONFIGURE_ARGS+= \
 	--srcdir=$(PKG_BUILD_DIR) \
+	--disable-silent-rules \
 	--disable-dependency-tracking \
 	--disable-static \
 	--disable-system-xmlrpc-c \
