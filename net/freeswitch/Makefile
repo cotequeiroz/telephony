@@ -26,7 +26,7 @@ FS_WITH_DEFAULT_HEAD:=77d0cfbf9e9a546b4eee23d9668cf44022f5d454
 FS_WITH_DEFAULT_HEAD_SHORT:=$(shell echo $(FS_WITH_DEFAULT_HEAD)|cut -b -7)
 PKG_SOURCE_VERSION:=$(if $(CONFIG_FS_WITH_LATEST_HEAD),$(shell git ls-remote $(PKG_SOURCE_URL) HEAD | cut -f1),$(FS_WITH_DEFAULT_HEAD))
 PKG_SOURCE_VERSION_SHORT:=$(shell echo $(PKG_SOURCE_VERSION)|cut -b -7)
-PKG_RELEASE:=$(PKG_SOURCE_VERSION_SHORT)
+PKG_RELEASE:=$(PKG_SOURCE_VERSION_SHORT)-1
 PKG_SOURCE:=$(PKG_DISTNAME)-$(FS_WITH_DEFAULT_HEAD_SHORT).tar.xz
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_SOURCE_SUBDIR)
@@ -268,7 +268,7 @@ define Package/$(PKG_NAME)
   $(call Package/$(PKG_NAME)/Default)
   MENU:=1
   TITLE:=FreeSWITCH open source telephony platform ($(PKG_SOURCE_VERSION_SHORT))
-  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +FS_WITH_SQLITE3:libsqlite3 +libsrtp +SSP_SUPPORT:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
+  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +FS_WITH_SQLITE3:libsqlite3 +libsrtp +GCC_LIBSSP:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
 endef
 
 
@@ -619,6 +619,10 @@ ifeq ($(CONFIG_ARCH),"mips")
 endif
 #endif
 
+ifeq ($(CONFIG_USE_GLIBC),y)
+	CONFIGURE_VARS+= \
+		LIBS="-L$(STAGING_DIR)/lib -Wl,--push-state,--as-needed -lbsd -Wl,--pop-state"
+endif
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
