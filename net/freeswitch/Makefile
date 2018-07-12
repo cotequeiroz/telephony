@@ -217,6 +217,7 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_FS_WITH_LIBVPX \
 	CONFIG_FS_WITH_LIBYUV \
 	CONFIG_FS_WITH_LZMA \
+	CONFIG_FS_WITH_MYSQL \
 	CONFIG_FS_WITH_ODBC \
 	CONFIG_FS_WITH_OGG \
 	CONFIG_FS_WITH_OPENSSL \
@@ -266,7 +267,7 @@ define Package/$(PKG_NAME)
   $(call Package/$(PKG_NAME)/Default)
   MENU:=1
   TITLE:=FreeSWITCH open source telephony platform ($(PKG_SOURCE_VERSION_SHORT))
-  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +libsqlite3 +FS_WITH_POSTGRESQL:libpq +libsrtp +GCC_LIBSSP:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
+  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +libsqlite3 +FS_WITH_MYSQL:libmysqlclient-r +FS_WITH_POSTGRESQL:libpq +libsrtp +GCC_LIBSSP:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
 endef
 
 
@@ -451,7 +452,7 @@ define Download/files
  define Download/$(1)
   FILE:=$(2)
   URL:=$(if $(4),$(4),http://files.$(PKG_NAME).org)/$(5)
-  MD5SUM:=$(3)
+  HASH:=$(3)
  endef
  define Prepare/$(1)
   $(LN) $(DL_DIR)/$(2) $(PKG_BUILD_DIR)/$(6)
@@ -464,64 +465,74 @@ MAKE_INSTALL_TARGETS:=install
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl),)
- $(eval $(call Download/files,json-cdr,json-c-0.9.tar.gz,4653b3b9c568bb9c782178abfaac128d,,downloads/libs/,libs/))
+ $(eval $(call Download/files,json-cdr,json-c-0.9.tar.gz,816fb2d4baab09e2f51a7c1be75bc9e03ed09d4cf3c2cd03c183f433bb9b565f,,downloads/libs/,libs/))
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-event-zmq),)
- $(eval $(call Download/files,event-zmq,zeromq-2.1.9.tar.gz,94c5e0262a79c5f82bc0b178c1f8a33d,http://download.zeromq.org http://download.zeromq.org/historic,,libs/))
+ $(eval $(call Download/files,event-zmq,zeromq-2.1.9.tar.gz,f3542f756687e622beef3a75c8e027fe2d95d4654350cbca4c070ffc58d9ace0,http://download.zeromq.org http://download.zeromq.org/historic,,libs/))
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-mongo),)
- $(eval $(call Download/files,mongo,mongo-c-driver-0.92.2.tar.gz,afab25a33abd3f1e0ba79c5a9da92651,,downloads/libs/,libs/))
+ $(eval $(call Download/files,mongo,mongo-c-driver-0.92.2.tar.gz,d1edef5f043628199095711b5e3e2917353d3781f9ff99b0f181a0fac83c75b8,,downloads/libs/,libs/))
 endif
 
+ifneq ($(CONFIG_FS_WITH_MYSQL),)
+# We need the file from http://apache.webthing.com/svn/apache/apr/ because apr-util version < 1.3
+# It is lincensed under GPL-2.0+
+ PKG_LICENSE += GPL-2.0+
+ PKG_LICENSE_FILES += libs/apr-util/dbd/apr_dbd_mysql.c
+ $(eval $(call Download/files,fs_apr_dbd_mysql,apr_dbd_mysql.c,0684af175089bb4f45135091c8413be27f4aa1905a84b37c31e41c4a5df53771,http://apache.webthing.com/svn/apache/apr,,libs/apr-util/dbd/))
+
+# The "recommended version", in case fs updates apr-util is at https://svn.apache.org/repos/asf/apr/apr/trunk/dbd/, and is not GPL-2.0+
+# $(eval $(call Download/files,fs_apr_dbd_mysql,apr_dbd_mysql.c,f2bc1f884c8c06ba3300f235e4209b3412f4b46d17591e4a24eaa6c6d13b3ee5,https://svn.apache.org/repos/asf/apr/apr/trunk/dbd,,libs/apr-util/dbd/))
+endif
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-08KHz),)
- $(eval $(call Download/files,sounds-en-08KHz,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.50.tar.gz,14cccba7b5c56f027fea391f1e0ee2d6,,,))
+ $(eval $(call Download/files,sounds-en-08KHz,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.51.tar.gz,e48a63bd69e6253d294ce43a941d603b02467feb5d92ee57a536ccc5f849a4a8,,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-16KHz),)
- $(eval $(call Download/files,sounds-en-16KHz,$(PKG_NAME)-sounds-en-us-callie-16000-1.0.50.tar.gz,261f42e310baa97cc4dcfdc51971aff8,,,))
+ $(eval $(call Download/files,sounds-en-16KHz,$(PKG_NAME)-sounds-en-us-callie-16000-1.0.51.tar.gz,324b1ab5ab754db5697963e9bf6a2f9c7aeb1463755e86bbb6dc4d6a77329da2,,,))
 	MAKE_INSTALL_TARGETS+= hd-sounds-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-32KHz),)
- $(eval $(call Download/files,sounds-en-32KHz,$(PKG_NAME)-sounds-en-us-callie-32000-1.0.50.tar.gz,f204512fadc49a3267ff4a5e899b77a5,,,))
+ $(eval $(call Download/files,sounds-en-32KHz,$(PKG_NAME)-sounds-en-us-callie-32000-1.0.51.tar.gz,06fd6b8aec937556bf5303ab19a212c60daf00546d395cf269dfe324ac9c6838,,,))
 	MAKE_INSTALL_TARGETS+= uhd-sounds-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-48KHz),)
- $(eval $(call Download/files,sounds-en-48KHz,$(PKG_NAME)-sounds-en-us-callie-48000-1.0.50.tar.gz,8622a77a5d6dcf5e47bdf30d6a33e27c,,,))
+ $(eval $(call Download/files,sounds-en-48KHz,$(PKG_NAME)-sounds-en-us-callie-48000-1.0.51.tar.gz,cfc50f1d9b5d43cb87a9a2c0ce136c37ee85ac3b0e5be930d8dc2c913c4495aa,,,))
 	MAKE_INSTALL_TARGETS+= cd-sounds-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-08KHz),)
- $(eval $(call Download/files,sounds-moh-08KHz,$(PKG_NAME)-sounds-music-8000-1.0.50.tar.gz,c1f62dc26360f39f8eb442d5efd0a3aa,,,))
+ $(eval $(call Download/files,sounds-moh-08KHz,$(PKG_NAME)-sounds-music-8000-1.0.52.tar.gz,2491dcb92a69c629b03ea070d2483908a52e2c530dd77791f49a45a4d70aaa07,,,))
 	MAKE_INSTALL_TARGETS+= moh-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-16KHz),)
- $(eval $(call Download/files,sounds-moh-16KHz,$(PKG_NAME)-sounds-music-16000-1.0.50.tar.gz,d253e26baa85e0e2e727a1cb1cca898e,,,))
+ $(eval $(call Download/files,sounds-moh-16KHz,$(PKG_NAME)-sounds-music-16000-1.0.52.tar.gz,93e0bf31797f4847dc19a94605c039ad4f0763616b6d819f5bddbfb6dd09718a,,,))
 	MAKE_INSTALL_TARGETS+= hd-moh-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-32KHz),)
- $(eval $(call Download/files,sounds-moh-32KHz,$(PKG_NAME)-sounds-music-32000-1.0.50.tar.gz,0e3ee69cb4ba2813ed0d3f7811332b63,,,))
+ $(eval $(call Download/files,sounds-moh-32KHz,$(PKG_NAME)-sounds-music-32000-1.0.52.tar.gz,4129788a638b77c5f85ff35abfcd69793d8aeb9d7833a75c74ec77355b2657a9,,,))
 	MAKE_INSTALL_TARGETS+= uhd-moh-install
 endif
 
 
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-moh-48KHz),)
- $(eval $(call Download/files,sounds-moh-48KHz,$(PKG_NAME)-sounds-music-48000-1.0.50.tar.gz,873a62df1ab3be4191eb2488156ec2c2,,,))
+ $(eval $(call Download/files,sounds-moh-48KHz,$(PKG_NAME)-sounds-music-48000-1.0.52.tar.gz,cc31cdb5b1bd653850bf6e054d963314bcf7c1706a9bf05f5a69bcbd00858d2a,,,))
 	MAKE_INSTALL_TARGETS+= cd-moh-install
 endif
 
@@ -598,10 +609,10 @@ CONFIGURE_ARGS+= \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-python),--with-python="$(CONFIG_FS_WITH_PYTHON_PATH)",--without-python) \
 	$(if ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl)),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
-	--without-mysql \
+	--with$(if $(CONFIG_FS_WITH_MYSQL),,out)-mysql \
 	--with$(if $(CONFIG_FS_WITH_POSTGRESQL),,out)-pgsql \
 	--with$(if $(CONFIG_FS_WITH_SQLITE3),,out)-sqlite3 \
-	ac_cv_file_dbd_apr_dbd_mysql_c="no" \
+	ac_cv_file_dbd_apr_dbd_mysql_c=$(if $(CONFIG_FS_WITH_MYSQL),"yes","no") \
 
 
 ifeq ($(CONFIG_TARGET_ARCH_PACKAGES),"kirkwood")
@@ -619,6 +630,7 @@ define Build/Prepare
 	$(call Prepare/event-zmq)
 	$(call Prepare/json-cdr)
 	$(call Prepare/mongo)
+	$(if $(CONFIG_FS_WITH_MYSQL),$(call Prepare/fs_apr_dbd_mysql))
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-08KHz),$(call Prepare/sounds-en-08KHz))
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-16KHz),$(call Prepare/sounds-en-16KHz))
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-32KHz),$(call Prepare/sounds-en-32KHz))
