@@ -217,7 +217,6 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_FS_WITH_LIBVPX \
 	CONFIG_FS_WITH_LIBYUV \
 	CONFIG_FS_WITH_LZMA \
-	CONFIG_FS_WITH_MYSQL \
 	CONFIG_FS_WITH_ODBC \
 	CONFIG_FS_WITH_OGG \
 	CONFIG_FS_WITH_OPENSSL \
@@ -267,7 +266,7 @@ define Package/$(PKG_NAME)
   $(call Package/$(PKG_NAME)/Default)
   MENU:=1
   TITLE:=FreeSWITCH open source telephony platform ($(PKG_SOURCE_VERSION_SHORT))
-  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +libsqlite3 +FS_WITH_MYSQL:libmysqlclient-r +FS_WITH_POSTGRESQL:libpq +libsrtp +GCC_LIBSSP:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
+  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +libsqlite3 +FS_WITH_POSTGRESQL:libpq +libsrtp +GCC_LIBSSP:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
 endef
 
 
@@ -478,17 +477,6 @@ ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-mongo),)
  $(eval $(call Download/files,mongo,mongo-c-driver-0.92.2.tar.gz,d1edef5f043628199095711b5e3e2917353d3781f9ff99b0f181a0fac83c75b8,,downloads/libs/,libs/))
 endif
 
-ifneq ($(CONFIG_FS_WITH_MYSQL),)
-# We need the file from http://apache.webthing.com/svn/apache/apr/ because apr-util version < 1.3
-# It is lincensed under GPL-2.0+
- PKG_LICENSE += GPL-2.0+
- PKG_LICENSE_FILES += libs/apr-util/dbd/apr_dbd_mysql.c
- $(eval $(call Download/files,fs_apr_dbd_mysql,apr_dbd_mysql.c,0684af175089bb4f45135091c8413be27f4aa1905a84b37c31e41c4a5df53771,http://apache.webthing.com/svn/apache/apr,,libs/apr-util/dbd/))
-
-# The "recommended version", in case fs updates apr-util is at https://svn.apache.org/repos/asf/apr/apr/trunk/dbd/, and is not GPL-2.0+
-# $(eval $(call Download/files,fs_apr_dbd_mysql,apr_dbd_mysql.c,f2bc1f884c8c06ba3300f235e4209b3412f4b46d17591e4a24eaa6c6d13b3ee5,https://svn.apache.org/repos/asf/apr/apr/trunk/dbd,,libs/apr-util/dbd/))
-endif
-
 ifneq ($(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-08KHz),)
  $(eval $(call Download/files,sounds-en-08KHz,$(PKG_NAME)-sounds-en-us-callie-8000-1.0.51.tar.gz,e48a63bd69e6253d294ce43a941d603b02467feb5d92ee57a536ccc5f849a4a8,,,))
 	MAKE_INSTALL_TARGETS+= sounds-install
@@ -609,10 +597,9 @@ CONFIGURE_ARGS+= \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-python),--with-python="$(CONFIG_FS_WITH_PYTHON_PATH)",--without-python) \
 	$(if ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl)),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
-	--with$(if $(CONFIG_FS_WITH_MYSQL),,out)-mysql \
 	--with$(if $(CONFIG_FS_WITH_POSTGRESQL),,out)-pgsql \
 	--with$(if $(CONFIG_FS_WITH_SQLITE3),,out)-sqlite3 \
-	ac_cv_file_dbd_apr_dbd_mysql_c=$(if $(CONFIG_FS_WITH_MYSQL),"yes","no") \
+	ac_cv_file_dbd_apr_dbd_mysql_c="no" \
 
 
 ifeq ($(CONFIG_TARGET_ARCH_PACKAGES),"kirkwood")
@@ -630,7 +617,6 @@ define Build/Prepare
 	$(call Prepare/event-zmq)
 	$(call Prepare/json-cdr)
 	$(call Prepare/mongo)
-	$(if $(CONFIG_FS_WITH_MYSQL),$(call Prepare/fs_apr_dbd_mysql))
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-08KHz),$(call Prepare/sounds-en-08KHz))
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-16KHz),$(call Prepare/sounds-en-16KHz))
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-sounds-en-32KHz),$(call Prepare/sounds-en-32KHz))
@@ -942,7 +928,7 @@ $(eval $(call BuildPlugin,callcenter,Call Center,vanilla,,,,))
 $(eval $(call BuildPlugin,cdr-csv,CSV-CDR Handler,mod,,,,)) # ~/conf
 $(eval $(call BuildPlugin,cdr-mongodb,MongoDB CDR logger,vanilla,,,,))
 $(eval $(call BuildPlugin,cdr-pg-csv,PostgreSQL CDR Handler,vanilla,,,,+coreutils +FS_WITH_POSTGRESQL:libpq @FS_WITH_POSTGRESQL))
-$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR Handler,vanilla,,,,@FS_WITH_SQLITE3))
+$(eval $(call BuildPlugin,cdr-sqlite,SQLite3 CDR Handler,vanilla,,,,))
 $(eval $(call BuildPlugin,cepstral,Cepstral Interface,vanilla,,,,@BROKEN)) # needs <swift.h>
 $(eval $(call BuildPlugin,cidlookup,Data Query For CID->NAME Services,mod,,,,+libcurl)) # ~/conf
 $(eval $(call BuildPlugin,cluechoo,Framework Demo,vanilla,,,,))
