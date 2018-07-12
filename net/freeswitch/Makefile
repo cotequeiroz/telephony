@@ -268,7 +268,7 @@ define Package/$(PKG_NAME)
   $(call Package/$(PKG_NAME)/Default)
   MENU:=1
   TITLE:=FreeSWITCH open source telephony platform ($(PKG_SOURCE_VERSION_SHORT))
-  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +FS_WITH_SQLITE3:libsqlite3 +libsrtp +GCC_LIBSSP:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
+  DEPENDS:=+FS_WITH_CORE_LIBEDIT_SUPPORT:libedit +FS_WITH_OPENSSL:libopenssl +libcurl +libdb47 +libfreetype +libgdbm $(ICONV_DEPENDS) $(INTL_DEPENDS) +libjpeg +libncurses +libopenldap +libpcre +libpng +libpthread +librt +libspeex +libspeexdsp +libsqlite3 +FS_WITH_POSTGRESQL:libpq +libsrtp +GCC_LIBSSP:libssp +libstdcpp +libuuid +PACKAGE_$(PKG_NAME)-mod-perl:perl
 endef
 
 
@@ -603,21 +603,13 @@ CONFIGURE_ARGS+= \
 	--with$(if $(CONFIG_FS_WITH_MYSQL),,out)-mysql \
 	--with$(if $(CONFIG_FS_WITH_POSTGRESQL),,out)-pgsql \
 	--with$(if $(CONFIG_FS_WITH_SQLITE3),,out)-sqlite3 \
+	ac_cv_file_dbd_apr_dbd_mysql_c="no" \
 
 
 ifeq ($(CONFIG_TARGET_ARCH_PACKAGES),"kirkwood")
 	CONFIGURE_ARGS+= --enable-arm5e-asm \
 
 endif
-
-
-#ifeq ($(CONFIG_LIBC),"uClibc")
-ifeq ($(CONFIG_ARCH),"mips")
-	CONFIGURE_VARS+= \
-		ac_cv_file_dbd_apr_dbd_mysql_c="no" \
-
-endif
-#endif
 
 ifeq ($(CONFIG_USE_GLIBC),y)
 	CONFIGURE_VARS+= \
