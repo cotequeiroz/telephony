@@ -19,7 +19,6 @@ PKG_VERSION:=1.9.0
 # http://fisheye.freeswitch.org
 #
 PKG_SOURCE_URL:=https://$(PKG_NAME).org/stash/scm/fs/$(PKG_NAME).git
-PATCH_DIR:=./patches/$(CONFIG_LIBC)
 
 
 FS_WITH_DEFAULT_HEAD:=77d0cfbf9e9a546b4eee23d9668cf44022f5d454
@@ -218,7 +217,6 @@ PKG_CONFIG_DEPENDS:= \
 	CONFIG_FS_WITH_LIBVPX \
 	CONFIG_FS_WITH_LIBYUV \
 	CONFIG_FS_WITH_LZMA \
-	CONFIG_FS_WITH_MYSQL \
 	CONFIG_FS_WITH_ODBC \
 	CONFIG_FS_WITH_OGG \
 	CONFIG_FS_WITH_OPENSSL \
@@ -600,7 +598,7 @@ CONFIGURE_ARGS+= \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-java),--with-java="$(STAGING_DIR)/usr",--without-java) \
 	$(if $(CONFIG_PACKAGE_$(PKG_NAME)-mod-python),--with-python="$(CONFIG_FS_WITH_PYTHON_PATH)",--without-python) \
 	$(if ($(CONFIG_PACKAGE_$(PKG_NAME)-mod-curl)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-cdr)|$(CONFIG_PACKAGE_$(PKG_NAME)-mod-xml-curl)),--with-libcurl="$(STAGING_DIR)/usr",--without-libcurl) \
-	--with$(if $(CONFIG_FS_WITH_MYSQL),,out)-mysql \
+	--without-mysql \
 	--with$(if $(CONFIG_FS_WITH_POSTGRESQL),,out)-pgsql \
 	--with$(if $(CONFIG_FS_WITH_SQLITE3),,out)-sqlite3 \
 	ac_cv_file_dbd_apr_dbd_mysql_c="no" \

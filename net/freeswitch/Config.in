@@ -67,11 +67,6 @@ menu "Configuration"
 	Select which database library to use for libs/apr-util package.
 	Default is SQLite.
 
-    config FS_WITH_MYSQL
-      bool "MySQL"
-      help
-	Compile libs/apr-util with MySQL support.
-
     config FS_WITH_POSTGRESQL
       bool "PostgreSQL"
       help
