@@ -278,6 +278,7 @@ endef
 
 
 define Package/$(PKG_NAME)/config
+  select OPENSSL_WITH_DEPRECATED if !OPENSSL_USE_VERSION_1_0_2
   source "$(SOURCE)/Config.in"
 endef
 
