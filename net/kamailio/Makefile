@@ -408,7 +408,7 @@ EXTRA_MODULES:= \
 # When CONFIG_CPU_TYPE matches one of the identifiers in the list below, set
 # ARCH to "mips2" to get FAST_LOCK support.
 ifeq ($(call qstrip,$(CONFIG_ARCH)),mips)
-CPU_MIPS2:=mips32 24kc 34kc 4kec 74kc
+CPU_MIPS2:=mips32 24kc 24kec 34kc 4kec 74kc
 endif
 
 MAKE_FLAGS += \
