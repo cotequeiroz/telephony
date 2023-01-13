@@ -236,7 +236,7 @@ include $(TOPDIR)/feeds/packages/lang/python/python3-version.mk
 include $(FS_PERL_FEED)/perlver.mk
 
 # https://github.com/signalwire/freeswitch/issues/1670
-TARGET_CFLAGS+=-Wno-error=address
+TARGET_CFLAGS+=-Wno-error=address -Wno-error=format-overflow -Wno-error=stringop-overflow
 
 PERL_SITELIB:=/usr/lib/perl$(PERL_MAJOR)/$(PERL_VERSION2)
 
