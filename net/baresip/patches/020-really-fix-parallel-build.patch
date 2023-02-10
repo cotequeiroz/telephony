@@ -1,0 +1,25 @@
+From ed73fa565bb88602b26a4e0323fa1451bc912958 Mon Sep 17 00:00:00 2001
+From: Christian Spielberger <c.spielberger@commend.com>
+Date: Sun, 23 May 2021 15:11:58 +0200
+Subject: [PATCH] ctrl_dbus: use c-files as target instead of o-files with
+ wrong path
+
+---
+ modules/ctrl_dbus/module.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/modules/ctrl_dbus/module.mk b/modules/ctrl_dbus/module.mk
+index 6a945d313..225446943 100644
+--- a/modules/ctrl_dbus/module.mk
++++ b/modules/ctrl_dbus/module.mk
+@@ -18,8 +18,8 @@ $(MOD)_CCHECK_OPT	= -e baresipbus.h -e baresipbus.c
+ 
+ PANDOC		:= $(shell pandoc -v dot 2> /dev/null)
+ 
+-modules/$(MOD)/baresipbus.o :	modules/$(MOD)/baresipbus.h
+-modules/$(MOD)/ctrl_dbus.o :	modules/$(MOD)/baresipbus.h
++modules/$(MOD)/baresipbus.c :	modules/$(MOD)/baresipbus.h
++modules/$(MOD)/ctrl_dbus.c :	modules/$(MOD)/baresipbus.h
+ 
+ modules/$(MOD)/baresipbus.h modules/$(MOD)/baresipbus.c: \
+ 	modules/$(MOD)/com.github.Baresip.xml
