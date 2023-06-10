@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.10.9
-PKG_RELEASE:=2
+PKG_RELEASE:=3# cotequeiroz
 PKG_MAINTAINER:=Sebastian Kemper <sebastian_ml@gmx.net>
 
 PKG_SOURCE:=freeswitch-$(PKG_VERSION).-release.tar.xz
@@ -239,6 +239,9 @@ TARGET_CFLAGS+=-Wno-error=address
 
 # Allow compiling with OpenSSL 3.0
 TARGET_CFLAGS+=-Wno-error=deprecated-declarations
+
+# Allow compiling with GCC 12
+TARGET_CFLAGS+=-Wno-error=stringop-overflow -Wno-error=format-overflow
 
 PERL_SITELIB:=/usr/lib/perl$(PERL_MAJOR)/$(PERL_VERSION2)
 
