@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeswitch
 PKG_VERSION:=1.10.10
-PKG_RELEASE:=2
+PKG_RELEASE:=3# cotequeiroz
 PKG_MAINTAINER:=Sebastian Kemper <sebastian_ml@gmx.net>
 
 PKG_SOURCE:=freeswitch-$(PKG_VERSION).-release.tar.xz
@@ -233,6 +233,9 @@ FS_PERL_FEED:=$(TOPDIR)/feeds/packages/lang/perl
 
 include $(TOPDIR)/feeds/packages/lang/python/python3-version.mk
 include $(FS_PERL_FEED)/perlver.mk
+
+# Allow compiling with GCC 12
+TARGET_CFLAGS+=-Wno-error=stringop-overflow -Wno-error=format-overflow
 
 PERL_SITELIB:=/usr/lib/perl$(PERL_MAJOR)/$(PERL_VERSION2)
 
