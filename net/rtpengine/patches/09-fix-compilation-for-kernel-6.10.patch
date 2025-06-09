@@ -1,0 +1,28 @@
+From 57e42acd308fb0280da60f3382ce77c3d7746853 Mon Sep 17 00:00:00 2001
+From: Richard Fuchs <rfuchs@sipwise.com>
+Date: Sun, 4 Aug 2024 18:16:31 -0400
+Subject: [PATCH] MT#55283 fix compilation for kernel >=6.10
+
+Closes #1845
+
+Fixes: https://bugs.debian.org/1077839
+Closes: #1077839
+Change-Id: Iead85dca40931308b23815135e45ec94a9525c9c
+---
+ kernel-module/xt_RTPENGINE.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- a/kernel-module/xt_RTPENGINE.c
++++ b/kernel-module/xt_RTPENGINE.c
+@@ -4010,7 +4010,11 @@ static int send_proxy_packet4(struct sk_
+ 	if (!net)
+ 		goto drop;
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,10,0)
++	rt = ip_route_output(net, dst->u.ipv4, src->u.ipv4, tos, 0, 0);
++#else
+ 	rt = ip_route_output(net, dst->u.ipv4, src->u.ipv4, tos, 0);
++#endif
+ 	if (IS_ERR(rt))
+ 		goto drop;
+ 	skb_dst_drop(skb);
