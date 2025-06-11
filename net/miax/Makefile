@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miax
 PKG_VERSION:=1.4
-PKG_RELEASE:=3
+PKG_RELEASE:=3# cotequeiroz
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/miax
@@ -37,6 +37,8 @@ define Package/miax/description
   a soundcard as a normal voip phone, taking input/output from 
   keyboard or analog/gsm/isdn modem.
 endef
+
+TARGET_CFLAGS += -Wno-error=implicit-function-declaration
 
 define Build/Compile
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \

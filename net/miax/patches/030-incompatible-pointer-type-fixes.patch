@@ -1,0 +1,26 @@
+Index: miax/iax/iax-client.h
+===================================================================
+--- miax.orig/iax/iax-client.h
++++ miax/iax/iax-client.h
+@@ -77,7 +77,7 @@ struct iax_session;
+ #ifdef WIN32
+ typedef int PASCAL (*sendto_t)(SOCKET, const char *, int, int, const struct sockaddr *, int);
+ #else
+-typedef int (*sendto_t)(int, const void *, size_t, int, const struct sockaddr *, socklen_t);
++typedef ssize_t (*sendto_t)(int, const void *, size_t, int, const struct sockaddr *, socklen_t);
+ #endif
+ 
+ struct iax_event {
+Index: miax/oss.c
+===================================================================
+--- miax.orig/oss.c
++++ miax/oss.c
+@@ -66,7 +66,7 @@ int oss_audio_out(struct iaxc_call *call
+ 			}
+ 		else {	
+ 			if (!call->gsmin) { call->gsmin = gsm_create(); }
+-			gsm_decode(call->gsmin, encoded, data);
++			gsm_decode(call->gsmin, encoded, (gsm_signal *) data);
+ 			}
+ 
+ 		for(i=ol;i<y;i++) {	
