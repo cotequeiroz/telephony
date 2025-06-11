@@ -72,6 +72,8 @@ RTPENGINE_USERID:=378
 RTPENGINE_GROUPID:=$(RTPENGINE_USERID)
 RTPENGINE_USER:=$(PKG_NAME)=$(RTPENGINE_USERID):$(PKG_NAME)=$(RTPENGINE_GROUPID)
 
+TARGET_CFLAGS += -Wno-error=int-conversion
+
 define Package/rtpengine/Default
   URL:=https://github.com/sipwise/rtpengine
 endef
