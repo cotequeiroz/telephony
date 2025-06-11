@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=siproxd
-PKG_RELEASE:=2
+PKG_RELEASE:=2# cotequeiroz
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/hb9xar/siproxd.git
@@ -70,7 +70,8 @@ MAKE_FLAGS+= \
 	SUBDIRS="src scripts contrib"
 
 TARGET_CFLAGS+= \
-	-Wno-unused-const-variable
+	-Wno-unused-const-variable \
+	-Wno-error=implicit-int
 
 URLMAP:=$(CONFIG_SIPROXD_MAX_CLIENTS)
 RTPPROXY:=$(shell expr $(URLMAP) \* 2)
