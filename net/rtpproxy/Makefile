@@ -14,7 +14,7 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/sippy/rtpproxy.git
 PKG_SOURCE_DATE=2019-10-02
 PKG_SOURCE_VERSION:=aa1f179e09097f467bc4726e3300014c1e35246f
-PKG_RELEASE:=4
+PKG_RELEASE:=4# cotequeiroz
 PKG_MIRROR_HASH:=36ecff6b69b580db5fe7e34e1d6764f111aa26ce81999743cea1f3c80ffa545c
 
 PKG_BUILD_PARALLEL:=1
@@ -63,7 +63,9 @@ CONFIGURE_ARGS += \
 	--without-xsltproc
 
 # Otherwise OpenWrt's CPPFLAGS are ignored
-TARGET_CFLAGS+=$(TARGET_CPPFLAGS)
+TARGET_CFLAGS += \
+	$(TARGET_CPPFLAGS) \
+	-Wno-error=incompatible-pointer-types
 
 define Package/rtpproxy/install
 	$(INSTALL_DIR) $(1)/usr/bin
