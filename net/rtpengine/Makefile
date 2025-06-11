@@ -8,7 +8,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=rtpengine
 PKG_VERSION:=11.5.1.49
-PKG_RELEASE:=1
+PKG_RELEASE:=1# cotequeiroz
 
 PKG_SOURCE:=$(PKG_NAME)-mr$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/sipwise/rtpengine/tar.gz/mr$(PKG_VERSION)?
@@ -71,6 +71,8 @@ RECORDING_DEPENDS := \
 RTPENGINE_USERID:=378
 RTPENGINE_GROUPID:=$(RTPENGINE_USERID)
 RTPENGINE_USER:=$(PKG_NAME)=$(RTPENGINE_USERID):$(PKG_NAME)=$(RTPENGINE_GROUPID)
+
+TARGET_CFLAGS += -Wno-error=int-conversion -Wno-error=incompatible-pointer-types
 
 define Package/rtpengine/Default
   URL:=https://github.com/sipwise/rtpengine
