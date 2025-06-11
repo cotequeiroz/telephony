@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=sofia-sip
 
 PKG_VERSION:=1.13.17
-PKG_RELEASE:=2
+PKG_RELEASE:=2# cotequeiroz
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/freeswitch/$(PKG_NAME)/tar.gz/v${PKG_VERSION}?
@@ -61,6 +61,9 @@ endef
 CONFIGURE_ARGS+= \
 	--without-doxygen \
 	--without-glib
+
+TARGET_CFLAGS+= \
+	-Wno-error=incompatible-pointer-types
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/sofia-sip-$(VERSION_EQUIVALENT)/sofia-{sip,resolv} \
