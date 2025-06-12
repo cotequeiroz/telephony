@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk
 PKG_VERSION:=20.14.0
-PKG_RELEASE:=1
+PKG_RELEASE:=1 #cotequeiroz
 PKG_CPE_ID:=cpe:/a:digium:asterisk
 
 PKG_SOURCE:=asterisk-$(PKG_VERSION).tar.gz
@@ -471,7 +471,7 @@ define Package/$(PKG_NAME)
 $(call Package/$(PKG_NAME)/Default)
   TITLE:=Complete open source PBX, v$(PKG_VERSION)
   MENU:=1
-  DEPENDS:=+ASTERISK_LIBXSLT_SUPPORT:libxslt +libstdcpp +jansson +libcap +libedit +libopenssl +libsqlite3 +libuuid +libxml2 +zlib
+  DEPENDS:=+ASTERISK_LIBXSLT_SUPPORT:libxslt +libstdcpp +jansson +libcap +libedit +libopenssl +libsqlite3 +libuuid +libxml2 +zlib @BROKEN
   USERID:=asterisk=385:asterisk=385
 endef
 
