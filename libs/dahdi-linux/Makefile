@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=dahdi-linux
 PKG_VERSION:=3.4.0
-PKG_RELEASE:=1
+PKG_RELEASE:=1# cotequeiroz
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/asterisk/$(PKG_NAME)/releases/download/v$(PKG_VERSION)
@@ -25,6 +25,9 @@ PKG_MAINTAINER:=Vittorio Gambaletta <openwrt@vittgam.net>
 PKG_EXTMOD_SUBDIRS:=drivers/dahdi
 
 include $(INCLUDE_DIR)/package.mk
+
+KERNEL_MAKE_FLAGS += \
+	 CFLAGS_dahdi-base.o=-Wno-restrict
 
 define KernelPackage/dahdi
   SUBMENU:=Voice over IP
