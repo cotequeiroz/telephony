@@ -11,7 +11,7 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/freeswitch/spandsp.git
 PKG_SOURCE_DATE=2025-07-07
 PKG_SOURCE_VERSION:=797760168945c96e91af55bde9d4edaea2e654f9
-PKG_RELEASE:=1
+PKG_RELEASE:=1# cotequeiroz
 PKG_MIRROR_HASH:=5e3a084b96dfe586d61170b7e87c92b3824d734c69efae518e0bf642843d8893
 
 PKG_INSTALL:=1
@@ -24,6 +24,7 @@ PKG_MAINTAINER:=Jiri Slachta <jiri@slachta.eu>
 
 PKG_BUILD_DEPENDS:=tiff/host
 
+include $(INCLUDE_DIR)/target.mk
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libspandsp3
@@ -44,6 +45,15 @@ CONFIGURE_VARS += \
 ifeq ($(CONFIG_SOFT_FLOAT),y)
 CONFIGURE_ARGS+= \
 	--enable-fixed-point
+else
+CONFIGURE_VARS+= \
+	ac_cv_fixed_point_machine_$(subst -,_,$(shell $(SCRIPT_DIR)/config.sub $(GNU_TARGET_NAME)))=no
+  ifneq ($(filter neon%,$(CPU_SUBTYPE)),)
+CONFIGURE_ARGS+= \
+	--enable-neon
+CONFIGURE_VARS+= \
+	ac_cv_symbol_arm_neon=yes
+  endif
 endif
 
 define Build/InstallDev
