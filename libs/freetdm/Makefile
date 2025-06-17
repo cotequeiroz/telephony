@@ -6,7 +6,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freetdm
-PKG_RELEASE:=3
+PKG_RELEASE:=3# cotequeiroz
 PKG_MAINTAINER:=
 
 PKG_SOURCE_PROTO:=git
@@ -147,6 +147,6 @@ $(eval $(call BuildPackage,freeswitch-mod-freetdm))
 $(eval $(call Package/libfreetdm/FTModule,analog,Analog,Offers generic FXO/FXS support for any type of card supported by FreeTDM.,))
 $(eval $(call Package/libfreetdm/FTModule,analog_em,Analog EM,Offers generic E&M signaling for any type of card supported by FreeTDM.,))
 $(eval $(call Package/libfreetdm/FTModule,libpri,LibPRI,Offers support for PRI lines using the open source libpri stack for any\ntype of card supported by FreeTDM. Supports both PRI and BRI signalling.,+libpri @!aarch64))
-$(eval $(call Package/libfreetdm/FTModule,pritap,PRI tapping,This module is used to tap PRI lines.,+libfreetdm-ftmod-libpri))
+$(eval $(call Package/libfreetdm/FTModule,pritap,PRI tapping,This module is used to tap PRI lines.,+libfreetdm-ftmod-libpri @BROKEN))
 $(eval $(call Package/libfreetdm/FTModule,skel,Skeleton,ftmod_skel is an example module.,))
 $(eval $(call Package/libfreetdm/FTModule,zt,DAHDI I/O,This module supports the DAHDI interface. The DAHDI interface is used by\nseveral hardware vendors.,))
