@@ -641,6 +641,10 @@ CONFIGURE_VARS+= \
 CONFIGURE_VARS+= \
 	disable_cc=yes
 
+# avoid depending on openal
+CONFIGURE_VARS+= \
+	ac_cv_lib_openal_alcLoopbackOpenDeviceSOFT=no
+
 # Regarding apr_cv_mutex_robust_shared=no see
 # http://www.openwall.com/lists/musl/2016/11/26/1
 ifeq ($(call qstrip,$(CONFIG_LIBC)),musl)
