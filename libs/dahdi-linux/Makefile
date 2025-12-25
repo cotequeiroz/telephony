@@ -44,7 +44,7 @@ define KernelPackage/dahdi-echocan-oslec
   TITLE:=DAHDI OSLEC echo canceller support
   DEPENDS:=kmod-dahdi +LINUX_6_12:kmod-echo +!LINUX_6_12:kmod-oslec
   URL:=http://www.asterisk.org/
-  FILES:=$(PKG_BUILD_DIR)/drivers/dahdi/dahdi_echocan_oslec.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(PKG_BUILD_DIR)/drivers/dahdi/dahdi_echocan_oslec.$(LINUX_KMOD_SUFFIX)@lt6.18
   AUTOLOAD:=$(call AutoProbe,dahdi_echocan_oslec)
 endef
 
