@@ -10,7 +10,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=dahdi-linux
 PKG_VERSION:=3.4.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/asterisk/$(PKG_NAME)/releases/download/v$(PKG_VERSION)
@@ -44,7 +44,7 @@ define KernelPackage/dahdi-echocan-oslec
   TITLE:=DAHDI OSLEC echo canceller support
   DEPENDS:=kmod-dahdi +kmod-echo
   URL:=http://www.asterisk.org/
-  FILES:=$(PKG_BUILD_DIR)/drivers/dahdi/dahdi_echocan_oslec.$(LINUX_KMOD_SUFFIX)
+  FILES:=$(PKG_BUILD_DIR)/drivers/dahdi/dahdi_echocan_oslec.$(LINUX_KMOD_SUFFIX)@lt6.18
   AUTOLOAD:=$(call AutoProbe,dahdi_echocan_oslec)
 endef
 
