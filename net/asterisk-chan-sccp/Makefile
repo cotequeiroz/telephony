@@ -9,7 +9,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk-chan-sccp
-PKG_RELEASE:=2
+PKG_RELEASE:=2# cotequeiroz
 
 # Updated to v4.3.3 release
 PKG_SOURCE_URL:=https://github.com/chan-sccp/chan-sccp.git
@@ -44,7 +44,7 @@ define Package/asterisk-chan-sccp
 	  +asterisk-bridge-native-rtp \
 	  +asterisk-bridge-simple \
 	  +asterisk-bridge-softmix \
-	  +asterisk-res-stasis-device-state
+	  +asterisk-res-stasis-device-state @BROKEN
   CONFLICTS:=asterisk-chan-skinny
 endef
 
