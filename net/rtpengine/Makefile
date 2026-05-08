@@ -8,7 +8,7 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=rtpengine
 PKG_VERSION:=13.5.1.3
-PKG_RELEASE:=1
+PKG_RELEASE:=1# cotequeiroz
 
 PKG_SOURCE:=$(PKG_NAME)-mr$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/sipwise/rtpengine/tar.gz/mr$(PKG_VERSION)?
@@ -61,6 +61,7 @@ ENGINE_DEPENDS_TRANSCODING := \
 	+libspandsp3
 
 RECORDING_DEPENDS := \
+	@BTREE_SUPPORT \
 	+bcg729 \
 	+glib2 \
 	+libffmpeg-full \
@@ -191,22 +192,6 @@ define Package/rtpengine-recording/install
 				$(1)/etc/rtpengine/rtpengine-recording.conf
 endef
 
-define Package/iptables-mod-rtpengine
-$(call Package/rtpengine/Default)
-  TITLE:=Sipwise rtpengine iptables extension
-  CATEGORY:=Network
-  SECTION:=net
-  SUBMENU:=Firewall
-  DEPENDS:=+PACKAGE_iptables-mod-rtpengine:libxtables
-endef
-
-define Package/iptables-mod-rtpengine/install
-	$(INSTALL_DIR) $(1)/usr/lib/iptables
-	$(INSTALL_BIN) \
-		$(PKG_BUILD_DIR)/iptables-extension/libxt_RTPENGINE.so \
-						$(1)/usr/lib/iptables
-endef
-
 define KernelPackage/ipt-rtpengine
 $(call Package/rtpengine/Default)
   TITLE:=Sipwise rtpengine netfilter module
@@ -267,10 +252,6 @@ ifneq ($(CONFIG_PACKAGE_kmod-ipt-rtpengine),)
 		$(KERNEL_MAKE_FLAGS)
 endif
 
-ifneq ($(CONFIG_PACKAGE_iptables-mod-rtpengine),)
-	$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/iptables-extension)
-endif
-
 ifneq ($(CONFIG_PACKAGE_rtpengine)$(CONFIG_PACKAGE_rtpengine-no-transcode),)
 	$(call Build/Compile/Default,-C $(PKG_BUILD_DIR)/daemon)
 endif
@@ -288,6 +269,5 @@ endef
 # collect_module_symvers won't get added.
 $(eval $(call KernelPackage,ipt-rtpengine))
 $(eval $(call BuildPackage,rtpengine-no-transcode))
-$(eval $(call BuildPackage,iptables-mod-rtpengine))
 $(eval $(call BuildPackage,rtpengine))
 $(eval $(call BuildPackage,rtpengine-recording))
